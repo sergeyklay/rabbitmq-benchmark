@@ -9,8 +9,8 @@
 int main(int argc, const char *argv[])
 {
 	const char *host_name, *vhost, *queue_name, *user, *password;
-	size_t msg_size;
-	int port, conn_status, msg_count, durable = 0;
+	size_t msg_size, msg_count;
+	int port, conn_status, durable = 0;
 	amqp_basic_properties_t props;
 	amqp_connection_state_t conn_state;
 	amqp_socket_t *conn_socket;
@@ -30,20 +30,18 @@ int main(int argc, const char *argv[])
 
 	msg_size = (size_t)atoi(argv[7]);
 
-	char *msg_body = malloc(msg_size);
-
 	if (strcmp(argv[8], "true") == 0) {
 		durable = 1;
 	}
 
-	msg_count = atoi(argv[9]);
+	msg_count = (size_t)atoi(argv[9]);
 
-
+	char *msg_body = malloc(msg_size);
 	if (msg_body == NULL) {
 		fprintf(stderr, "malloc error, try to reduce the msgsize parameter\n");
 		exit(1);
 	}
-	memset(msg_body,'x',msg_size);
+	memset(msg_body, 'x', msg_size);
 
 	conn_state  = amqp_new_connection();
 	conn_socket = amqp_tcp_socket_new(conn_state);
@@ -64,7 +62,7 @@ int main(int argc, const char *argv[])
 
 	int i,j;
 	long long start = timeInMilliseconds();
-	for (i = 0; i < msg_count/10000; i++) {
+	for (i = 0; i < msg_count / 10000; i++) {
 		long long innerStart = timeInMilliseconds();
 		for (j = 0; j < 10000; j++) {
 			die_on_error(
@@ -87,7 +85,7 @@ int main(int argc, const char *argv[])
 	}
 
 	long long end = timeInMilliseconds();
-	printf("It takes %lld millseconds to send %d messages to queue\n", end - start, msg_count);
+	printf("It takes %lld millseconds to send %zu messages to queue\n", end - start, msg_count);
 
 	die_on_amqp_error(amqp_channel_close(conn_state, 1, AMQP_REPLY_SUCCESS), "Closing channel");
 	die_on_amqp_error(amqp_connection_close(conn_state, AMQP_REPLY_SUCCESS), "Closing connection");
