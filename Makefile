@@ -1,13 +1,12 @@
-SRCDIR              = $(realpath $(dir $(lastword $(filter Makefile,$(MAKEFILE_LIST)))))
-PRODUCER            = producer
-CONSUMER            = consumer
-DEPS                = utils.o platform_utils.o
-TARGET              = $(PRODUCER) $(CONSUMER)
-CC                  = gcc
-CFLAGS             += -Wall -g -O2 -I$(SRCDIR) -I$(SRCDIR)/headers
+PRODUCER  = producer
+CONSUMER  = consumer
+DEPS      = utils.o platform_utils.o
+TARGET    = $(PRODUCER) $(CONSUMER)
+CC        = gcc
+CFLAGS    += -Wall -g -O2 -I. -I./headers
 
 ifndef CXXFLAGS
-CXXFLAGS = -O2 -g
+CXXFLAGS  = -O2 -g
 endif
 
 all: $(TARGET)
