@@ -1,10 +1,13 @@
+CC=gcc
+CFLAGS= -Wall -I. -I ./headers
+
 all: clean producer consumer
 
 producer: producer.c
-	gcc -o producer -Wall producer.c utils.c unix/platform_utils.c -I. -lrabbitmq
+	$(CC) $(CFLAGS) -o producer producer.c utils.c unix/platform_utils.c -lrabbitmq
 
 consumer: consumer.c
-	gcc -o consumer -Wall consumer.c utils.c unix/platform_utils.c -I. -lrabbitmq
+	$(CC) $(CFLAGS) -o consumer consumer.c utils.c unix/platform_utils.c -lrabbitmq
 
 clean:
 	-rm -f producer consumer
