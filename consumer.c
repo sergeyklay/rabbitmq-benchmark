@@ -5,36 +5,33 @@
 #include <assert.h>
 #include <amqp.h>
 #include <amqp_framing.h>
-
 #include "utils.h"
 
 int main(int argc,const char *argv[]) {
+	const char *hostName, *vhost, *queueName;
+	int prefetchCount, sockfd, port, noAck = 1, channelId = 1;
 
-	const char *hostName;
-	int port;
-	const char *queueName;
-	int prefetchCount;
-	int noAck = 1;
-
-	if (argc < 6) {
-		fprintf(stderr,"Usage: consumer host port queuename prefetch_count no_ack\n");
+	if (argc < 7) {
+		fprintf(stderr, "Usage: ./consumer host port vhost queuename prefetch_count no_ack\n");
 		exit(1);
 	}
 
 	hostName = argv[1];
 	port = atoi(argv[2]);
-	queueName = argv[3];
-	prefetchCount = atoi(argv[4]);
-	if(strcmp(argv[5],"false")==0) noAck = 0;
+	vhost = argv[3];
+	queueName = argv[4];
+	prefetchCount = atoi(argv[5]);
 
-	int sockfd;
-	int channelId = 1;
+	if (strcmp(argv[6], "false") == 0) {
+		noAck = 0;
+	}
+
 	amqp_connection_state_t conn;
 	conn = amqp_new_connection();
 
 	die_on_error(sockfd = amqp_open_socket(hostName, port), "Opening socket");
 	amqp_set_sockfd(conn, sockfd);
-	die_on_amqp_error(amqp_login(conn, "/", 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, "guest", "guest"),"Logging in");
+	die_on_amqp_error(amqp_login(conn, vhost, 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, "guest", "guest"), "Logging in");
 	amqp_channel_open(conn, channelId);
 	die_on_amqp_error(amqp_get_rpc_reply(conn), "Opening channel");
 
