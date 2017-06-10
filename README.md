@@ -26,6 +26,8 @@ Following arquments are required to test publisher (`./producer`):
 * `HOST`
 * `PORT`
 * `VHOST`
+* `USER`
+* `PASSWORD`
 * `QUEUE`
 * `MSGSIZE` (in bytes)
 * `DURABLE`
@@ -34,7 +36,7 @@ Following arquments are required to test publisher (`./producer`):
 For example:
 
 ```bash
-./producer localhost 5672 "/" benchmark_queue 1024 true 100000
+./producer localhost 5672 "/" user password benchmark_queue 1024 true 100000
 ```
 
 Following arquments are required to test consumer (`./consumer`):
@@ -42,6 +44,8 @@ Following arquments are required to test consumer (`./consumer`):
 * `HOST`
 * `PORT`
 * `VHOST`
+* `USER`
+* `PASSWORD`
 * `QUEUE`
 * `QOS` (prefetch count)
 * `NO_ACK`
@@ -49,7 +53,7 @@ Following arquments are required to test consumer (`./consumer`):
 For example:
 
 ```bash
-./consumer localhost 5672 "/" benchmark_queue 0 true
+./consumer localhost 5672 "/" user password benchmark_queue 0 true
 ```
 
 ### License
