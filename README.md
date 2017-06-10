@@ -11,10 +11,24 @@ Inspiration and code from:
 
 * The [`rabbitmq-c`](https://github.com/alanxz/rabbitmq-c) client
 
-### General Compilation
+### Compilation
+
+To create producer and consumer use command as follows:
 
 ```bash
 make
+```
+
+To create producer use:
+
+```bash
+make producer
+```
+
+To create consumer use:
+
+```bash
+make consumer
 ```
 
 ### Usage
