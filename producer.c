@@ -4,11 +4,15 @@
 #include <stdint.h>
 #include <amqp.h>
 #include <amqp_framing.h>
+
 #include "utils.h"
 
-int main(int argc, const char *argv[]) {
+int main(int argc, const char *argv[])
+{
 	const char *hostName, *vhost, *queueName, *user, *password;
-	int port, msgCount, msgSize, durable = 0;
+	int port, msgCount, msgSize, sockfd, durable = 0, channelId = 1;
+	amqp_connection_state_t connection;
+	amqp_basic_properties_t props;
 
 	if (argc < 8) {
 		fprintf(stderr, "Usage: ./producer host port vhost user password queuename msgsize durable msgcount\n");
@@ -30,47 +34,55 @@ int main(int argc, const char *argv[]) {
 	msgCount = atoi(argv[9]);
 
 	char *msgBody = malloc(msgSize);
-	if(msgBody == NULL) {
-		fprintf(stderr,"malloc error, try to reduce the msgsize parameter\n");
+	if (msgBody == NULL) {
+		fprintf(stderr, "malloc error, try to reduce the msgsize parameter\n");
 		exit(1);
 	}
 	memset(msgBody,'x',msgSize);
 
-	int sockfd;
-	int channelId = 1;
-	amqp_connection_state_t conn;
-	conn = amqp_new_connection();
+	connection = amqp_new_connection();
 
 	die_on_error(sockfd = amqp_open_socket(hostName, port), "Opening socket");
-	amqp_set_sockfd(conn, sockfd);
-	die_on_amqp_error(amqp_login(conn, vhost, 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, user, password), "Logging in");
-	amqp_channel_open(conn, channelId);
-	die_on_amqp_error(amqp_get_rpc_reply(conn), "Opening channel");
+	amqp_set_sockfd(connection, sockfd);
+	die_on_amqp_error(amqp_login(connection, vhost, 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, user, password), "Logging in");
+	amqp_channel_open(connection, channelId);
+	die_on_amqp_error(amqp_get_rpc_reply(connection), "Opening channel");
 
-	amqp_basic_properties_t props;
-	if(durable) {
+	if (durable) {
 		props._flags = AMQP_BASIC_DELIVERY_MODE_FLAG;
 		props.delivery_mode = 2;
 	}
 
 	int i,j;
 	long long start = timeInMilliseconds();
-	for(i = 0; i < msgCount/10000; i++) {
+	for (i = 0; i < msgCount/10000; i++) {
 		long long innerStart = timeInMilliseconds();
 		for (j = 0; j < 10000; j++) {
-			die_on_error(amqp_basic_publish(conn,channelId,amqp_cstring_bytes(""),amqp_cstring_bytes(queueName),0,
-											0,&props,amqp_cstring_bytes(msgBody)),"Publishing");
+			die_on_error(
+					amqp_basic_publish(
+							connection,
+							channelId,
+							amqp_cstring_bytes(""),
+							amqp_cstring_bytes(queueName),
+							0,
+							0,
+							&props,
+							amqp_cstring_bytes(msgBody)
+					),
+					"Publishing"
+			);
 		}
+
 		long long innerEnd = timeInMilliseconds();
-		printf("round %d takes %lld millseconds(10000 messages published every round)\n",i,innerEnd-innerStart);
+		printf("round %d takes %lld millseconds(10000 messages published every round)\n", i, innerEnd - innerStart);
 	}
 
 	long long end = timeInMilliseconds();
-	printf("It takes %lld millseconds to send %d messages to queue\n",end-start,msgCount);
+	printf("It takes %lld millseconds to send %d messages to queue\n", end - start, msgCount);
 
-	die_on_amqp_error(amqp_channel_close(conn, 1, AMQP_REPLY_SUCCESS), "Closing channel");
-	die_on_amqp_error(amqp_connection_close(conn, AMQP_REPLY_SUCCESS), "Closing connection");
-	die_on_error(amqp_destroy_connection(conn), "Ending connection");
+	die_on_amqp_error(amqp_channel_close(connection, 1, AMQP_REPLY_SUCCESS), "Closing channel");
+	die_on_amqp_error(amqp_connection_close(connection, AMQP_REPLY_SUCCESS), "Closing connection");
+	die_on_error(amqp_destroy_connection(connection), "Ending connection");
 
 	return 0;
 }
