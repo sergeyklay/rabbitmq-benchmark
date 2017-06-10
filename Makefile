@@ -1,4 +1,4 @@
-all: producer consumer
+all: clean producer consumer
 
 producer: producer.c
 	gcc -o producer -Wall producer.c utils.c unix/platform_utils.c -I. -lrabbitmq

@@ -3,7 +3,7 @@ project(rabbitmq_benchmark C)
 
 # NOTE: This CMake file is just for syntax highlighting in CLion
 
-# amqp.h, amqp_framing.h
+# amqp.h, amqp_framing.h, amqp_ssl_socket.h and amqp_tcp_socket.h
 include_directories(/usr/local/include)
 
 set(SOURCE_FILES
