@@ -1,52 +1,61 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdint.h>
 #include <amqp.h>
-#include <amqp_framing.h>
+#include <amqp_tcp_socket.h>
 
 #include "utils.h"
 
 int main(int argc, const char *argv[])
 {
-	const char *hostName, *vhost, *queueName, *user, *password;
-	int port, msgCount, msgSize, sockfd, durable = 0, channelId = 1;
-	amqp_connection_state_t connection;
+	const char *host_name, *vhost, *queue_name, *user, *password;
+	size_t msg_size;
+	int port, conn_status, msg_count, durable = 0;
 	amqp_basic_properties_t props;
+	amqp_connection_state_t conn_state;
+	amqp_socket_t *conn_socket;
+	amqp_channel_t channel_id = 1;
 
 	if (argc < 8) {
 		fprintf(stderr, "Usage: ./producer host port vhost user password queuename msgsize durable msgcount\n");
 		exit(1);
 	}
 
-	hostName = argv[1];
-	port = atoi(argv[2]);
-	vhost = argv[3];
-	user = argv[4];
-	password = argv[5];
-	queueName = argv[6];
-	msgSize = atoi(argv[7]);
+	host_name  = argv[1];
+	port       = atoi(argv[2]);
+	vhost      = argv[3];
+	user       = argv[4];
+	password   = argv[5];
+	queue_name = argv[6];
+
+	msg_size = (size_t)atoi(argv[7]);
+
+	char *msg_body = malloc(msg_size);
 
 	if (strcmp(argv[8], "true") == 0) {
 		durable = 1;
 	}
 
-	msgCount = atoi(argv[9]);
+	msg_count = atoi(argv[9]);
 
-	char *msgBody = malloc(msgSize);
-	if (msgBody == NULL) {
+
+	if (msg_body == NULL) {
 		fprintf(stderr, "malloc error, try to reduce the msgsize parameter\n");
 		exit(1);
 	}
-	memset(msgBody,'x',msgSize);
+	memset(msg_body,'x',msg_size);
 
-	connection = amqp_new_connection();
+	conn_state  = amqp_new_connection();
+	conn_socket = amqp_tcp_socket_new(conn_state);
+	conn_status = amqp_socket_open(conn_socket, host_name, port);
 
-	die_on_error(sockfd = amqp_open_socket(hostName, port), "Opening socket");
-	amqp_set_sockfd(connection, sockfd);
-	die_on_amqp_error(amqp_login(connection, vhost, 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, user, password), "Logging in");
-	amqp_channel_open(connection, channelId);
-	die_on_amqp_error(amqp_get_rpc_reply(connection), "Opening channel");
+	if (conn_status) {
+		die("Unable to open connection to RabbitMQ server");
+	}
+
+	die_on_amqp_error(amqp_login(conn_state, vhost, 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, user, password), "Logging in");
+	amqp_channel_open(conn_state, channel_id);
+	die_on_amqp_error(amqp_get_rpc_reply(conn_state), "Opening channel");
 
 	if (durable) {
 		props._flags = AMQP_BASIC_DELIVERY_MODE_FLAG;
@@ -55,19 +64,19 @@ int main(int argc, const char *argv[])
 
 	int i,j;
 	long long start = timeInMilliseconds();
-	for (i = 0; i < msgCount/10000; i++) {
+	for (i = 0; i < msg_count/10000; i++) {
 		long long innerStart = timeInMilliseconds();
 		for (j = 0; j < 10000; j++) {
 			die_on_error(
 					amqp_basic_publish(
-							connection,
-							channelId,
-							amqp_cstring_bytes(""),
-							amqp_cstring_bytes(queueName),
-							0,
-							0,
-							&props,
-							amqp_cstring_bytes(msgBody)
+						conn_state,
+						channel_id,
+						amqp_cstring_bytes(""),
+						amqp_cstring_bytes(queue_name),
+						0,
+						0,
+						&props,
+						amqp_cstring_bytes(msg_body)
 					),
 					"Publishing"
 			);
@@ -78,11 +87,11 @@ int main(int argc, const char *argv[])
 	}
 
 	long long end = timeInMilliseconds();
-	printf("It takes %lld millseconds to send %d messages to queue\n", end - start, msgCount);
+	printf("It takes %lld millseconds to send %d messages to queue\n", end - start, msg_count);
 
-	die_on_amqp_error(amqp_channel_close(connection, 1, AMQP_REPLY_SUCCESS), "Closing channel");
-	die_on_amqp_error(amqp_connection_close(connection, AMQP_REPLY_SUCCESS), "Closing connection");
-	die_on_error(amqp_destroy_connection(connection), "Ending connection");
+	die_on_amqp_error(amqp_channel_close(conn_state, 1, AMQP_REPLY_SUCCESS), "Closing channel");
+	die_on_amqp_error(amqp_connection_close(conn_state, AMQP_REPLY_SUCCESS), "Closing connection");
+	die_on_error(amqp_destroy_connection(conn_state), "Ending connection");
 
 	return 0;
 }
