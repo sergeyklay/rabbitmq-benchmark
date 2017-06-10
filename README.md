@@ -14,7 +14,7 @@ Inspiration and code from:
 ### General Compilation
 
 ```bash
-make all
+make
 ```
 
 ### Usage

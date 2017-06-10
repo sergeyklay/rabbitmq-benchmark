@@ -1,10 +1,12 @@
-all:producer consumer
+all: producer consumer
 
-producer:producer.c
+producer: producer.c
 	gcc -o producer -Wall producer.c utils.c unix/platform_utils.c -I. -lrabbitmq
 
-consumer:consumer.c
+consumer: consumer.c
 	gcc -o consumer -Wall consumer.c utils.c unix/platform_utils.c -I. -lrabbitmq
 
 clean:
-	rm producer consumer
+	-rm -f producer consumer
+
+.PHONY: clean
