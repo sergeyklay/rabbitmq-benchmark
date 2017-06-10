@@ -8,8 +8,8 @@ include_directories(/usr/local/include)
 include_directories(./headers)
 
 set(SOURCE_FILES
-        unix/platform_utils.c
         consumer.c
+        platform_utils.c
         producer.c
         utils.c)
 
