@@ -4,28 +4,27 @@
 #include <stdint.h>
 #include <amqp.h>
 #include <amqp_framing.h>
-
 #include "utils.h"
 
 int main(int argc, const char *argv[]) {
+	const char *hostName, *vhost, *queueName;
+	int port, msgCount, msgSize, durable = 0;
 
-	const char *hostName;
-	int port;
-	const char *queueName;
-	int msgSize;
-	int durable = 0;
-	int msgCount;
-
-	if (argc < 7){
-		fprintf(stderr,"Usage: producer host port queuename msgsize durable msgcount\n");
+	if (argc < 8) {
+		fprintf(stderr, "Usage: ./producer host port vhost queuename msgsize durable msgcount\n");
 		exit(1);
 	}
 
 	hostName = argv[1];
 	port = atoi(argv[2]);
-	queueName = argv[3];
-	msgSize = atoi(argv[4]);
-	if(strcmp(argv[5],"true") == 0) durable = 1;
+	vhost = argv[3];
+	queueName = argv[4];
+	msgSize = atoi(argv[6]);
+
+	if (strcmp(argv[5], "true") == 0) {
+		durable = 1;
+	}
+
 	msgCount = atoi(argv[6]);
 
 	char *msgBody = malloc(msgSize);
@@ -42,7 +41,7 @@ int main(int argc, const char *argv[]) {
 
 	die_on_error(sockfd = amqp_open_socket(hostName, port), "Opening socket");
 	amqp_set_sockfd(conn, sockfd);
-	die_on_amqp_error(amqp_login(conn, "/", 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, "guest", "guest"),"Logging in");
+	die_on_amqp_error(amqp_login(conn, vhost, 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, "guest", "guest"),"Logging in");
 	amqp_channel_open(conn, channelId);
 	die_on_amqp_error(amqp_get_rpc_reply(conn), "Opening channel");
 
