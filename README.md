@@ -9,6 +9,8 @@ Inspiration and code from:
 
 ### Requirements
 
+* OS: Linux || Solaris || FreeBSD || macOS
+* Compiller: `g++` >= 4.4
 * The [`alanxz/rabbitmq-c`](https://github.com/alanxz/rabbitmq-c) client
 
 ### Compilation
