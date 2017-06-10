@@ -1,15 +1,30 @@
-CC=gcc
-CFLAGS= -Wall -I. -I ./headers
+SRCDIR              = $(realpath $(dir $(lastword $(filter Makefile,$(MAKEFILE_LIST)))))
+PRODUCER            = producer
+CONSUMER            = consumer
+DEPS                = utils.o platform_utils.o
+TARGET              = $(PRODUCER) $(CONSUMER)
+CC                  = gcc
+CFLAGS             += -Wall -g -O2 -I$(SRCDIR) -I$(SRCDIR)/headers
 
-all: clean producer consumer
+ifndef CXXFLAGS
+CXXFLAGS = -O2 -g
+endif
 
-producer: producer.c
-	$(CC) $(CFLAGS) -o producer producer.c utils.c unix/platform_utils.c -lrabbitmq
+all: $(TARGET)
 
-consumer: consumer.c
-	$(CC) $(CFLAGS) -o consumer consumer.c utils.c unix/platform_utils.c -lrabbitmq
+$(PRODUCER): clean $(DEPS)
+	$(CC) $(CFLAGS) $(DEPS) $(PRODUCER).c -o $(PRODUCER) -lrabbitmq
+
+$(CONSUMER): clean $(DEPS)
+	$(CC) $(CFLAGS) $(DEPS) $(CONSUMER).c -o $(CONSUMER) -lrabbitmq
+
+utils.o:
+	$(CC) $(CFLAGS) -c utils.c -o "$@"
+
+platform_utils.o:
+	$(CC) $(CFLAGS) -c platform_utils.c -o "$@"
 
 clean:
-	-rm -f producer consumer
+	-rm -rf $(PRODUCER) $(CONSUMER) *.o *.dSYM
 
 .PHONY: clean
