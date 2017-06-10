@@ -9,7 +9,7 @@ Inspiration and code from:
 
 ### Requirements
 
-* The [`rabbitmq-c`](https://github.com/alanxz/rabbitmq-c) client
+* The [`alanxz/rabbitmq-c`](https://github.com/alanxz/rabbitmq-c) client
 
 ### Compilation
 
