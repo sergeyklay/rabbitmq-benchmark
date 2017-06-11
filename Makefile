@@ -4,6 +4,9 @@ TARGET             = $(PRODUCER) $(CONSUMER)
 CC                 = gcc
 CFLAGS             += -march=native -mtune=native -Wall -g -O2 -I. -I./headers
 
+LIBCONFIG_INCLUDES  = $(shell pkg-config --cflags libconfig)
+LIBCONFIG_LINK      = $(shell pkg-config --libs libconfig)
+
 all: $(TARGET)
 
 $(PRODUCER): utils.o platform_utils.o
@@ -16,6 +19,9 @@ utils.o:
 	$(CC) $(CFLAGS) -c $(basename $(notdir $@)).c -o "$@"
 
 platform_utils.o:
+	$(CC) $(CFLAGS) -c $(basename $(notdir $@)).c -o "$@"
+
+logger.o:
 	$(CC) $(CFLAGS) -c $(basename $(notdir $@)).c -o "$@"
 
 clean:
