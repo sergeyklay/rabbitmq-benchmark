@@ -1,27 +1,22 @@
-PRODUCER  = producer
-CONSUMER  = consumer
-DEPS      = utils.o platform_utils.o
-TARGET    = $(PRODUCER) $(CONSUMER)
-CC        = gcc
-CFLAGS    += -Wall -g -O2 -I. -I./headers
-
-ifndef CXXFLAGS
-CXXFLAGS  = -O2 -g
-endif
+PRODUCER           = producer
+CONSUMER           = consumer
+TARGET             = $(PRODUCER) $(CONSUMER)
+CC                 = gcc
+CFLAGS             += -march=native -mtune=native -Wall -g -O2 -I. -I./headers
 
 all: $(TARGET)
 
-$(PRODUCER): clean $(DEPS)
-	$(CC) $(CFLAGS) $(DEPS) $(PRODUCER).c -o $(PRODUCER) -lrabbitmq
+$(PRODUCER): utils.o platform_utils.o
+	$(CC) $(CFLAGS) utils.o platform_utils.o $(PRODUCER).c -o $(PRODUCER) -lrabbitmq
 
-$(CONSUMER): clean $(DEPS)
-	$(CC) $(CFLAGS) $(DEPS) $(CONSUMER).c -o $(CONSUMER) -lrabbitmq
+$(CONSUMER): utils.o platform_utils.o
+	$(CC) $(CFLAGS) utils.o platform_utils.o $(CONSUMER).c -o $(CONSUMER) -lrabbitmq
 
 utils.o:
-	$(CC) $(CFLAGS) -c utils.c -o "$@"
+	$(CC) $(CFLAGS) -c $(basename $(notdir $@)).c -o "$@"
 
 platform_utils.o:
-	$(CC) $(CFLAGS) -c platform_utils.c -o "$@"
+	$(CC) $(CFLAGS) -c $(basename $(notdir $@)).c -o "$@"
 
 clean:
 	-rm -rf $(PRODUCER) $(CONSUMER) *.o *.dSYM
