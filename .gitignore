@@ -2,3 +2,4 @@
 /producer
 /cmake-build-debug
 /*.dSYM
+config.cfg

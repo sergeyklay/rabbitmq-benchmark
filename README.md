@@ -12,6 +12,19 @@ Inspiration and code from:
 * OS: Linux || Solaris || FreeBSD || macOS
 * Compiller: `g++` >= 4.4
 * The [`alanxz/rabbitmq-c`](https://github.com/alanxz/rabbitmq-c) client
+* The [`libconfig`](http://www.hyperrealm.com/libconfig) library
+
+**Ubuntu**
+
+```bash
+apt-get install libconfig++9
+```
+
+**macOS**
+
+```bash
+brew install libconfig
+```
 
 ### General Compilation
 
@@ -32,6 +45,10 @@ To build only `consumer` use:
 ```bash
 make consumer
 ```
+
+### Creating configuration
+
+Copy `config.cfg.dist` to `config.cfg` and edit this file.
 
 ### Usage
 
