@@ -10,7 +10,7 @@ int main(int argc, const char *argv[])
 {
 	const char *host_name, *vhost, *queue_name, *user, *password;
 	size_t msg_size, msg_count;
-	int port, conn_status, durable = 0;
+	int port, durable = 0;
 	amqp_basic_properties_t props;
 	amqp_connection_state_t conn_state;
 	amqp_socket_t *conn_socket;
@@ -45,9 +45,8 @@ int main(int argc, const char *argv[])
 
 	conn_state  = amqp_new_connection();
 	conn_socket = amqp_tcp_socket_new(conn_state);
-	conn_status = amqp_socket_open(conn_socket, host_name, port);
 
-	if (conn_status) {
+	if (amqp_socket_open(conn_socket, host_name, port)) {
 		die("Unable to open connection to RabbitMQ server");
 	}
 
