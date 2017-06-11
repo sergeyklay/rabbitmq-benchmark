@@ -11,6 +11,7 @@ set(SOURCE_FILES
         consumer.c
         platform_utils.c
         producer.c
-        utils.c)
+        utils.c
+        logger.c)
 
 add_executable(rabbitmq_benchmark ${SOURCE_FILES})
