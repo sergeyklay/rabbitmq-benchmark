@@ -15,7 +15,7 @@ typedef enum {
 } log_level_t;
 
 int logger_quit(void);
-int logger_initialize(const char *filename);
+int logger_init(const char *filename);
 void logger_vprint(log_level_t level, const char *msg, ...);
 
 #endif //RABBITMQ_BENCHMARK_LOGGER_H

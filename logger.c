@@ -41,7 +41,7 @@ int logger_quit(void) {
 	return log_file && fclose(log_file) != EOF;
 }
 
-int logger_initialize(const char *filename) {
+int logger_init(const char *filename) {
 	int ret = 0;
 
 	if (filename) {
