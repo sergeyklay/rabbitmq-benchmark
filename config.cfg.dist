@@ -1,0 +1,9 @@
+RABBITMQ:
+{
+	hostname = "127.0.0.1";
+	port     = 5672;
+	vhost    = "/";
+	username = "guest";
+	username = "guest";
+	queue    = "benchmark_queue";
+}
