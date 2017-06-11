@@ -13,21 +13,21 @@ Inspiration and code from:
 * Compiller: `g++` >= 4.4
 * The [`alanxz/rabbitmq-c`](https://github.com/alanxz/rabbitmq-c) client
 
-### Compilation
+### General Compilation
 
-To create producer and consumer use command as follows:
+Follow these instructions to build `producer` and `consumer` for your platform:
 
 ```bash
 make
 ```
 
-To create producer use:
+To build only `producer` use:
 
 ```bash
 make producer
 ```
 
-To create consumer use:
+To build only `consumer` use:
 
 ```bash
 make consumer
@@ -35,7 +35,7 @@ make consumer
 
 ### Usage
 
-First you need to create test queue. For example you can use [rabbitmq-management](https://www.rabbitmq.com/management.html) plugin.
+First of all you need to create test queue. For example you can use [rabbitmq-management](https://www.rabbitmq.com/management.html) plugin.
 
 Following arquments are required to test publisher (`./producer`):
 
