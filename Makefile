@@ -7,9 +7,7 @@ CFLAGS             += -march=native -mtune=native -Wall -fstack-protector-all -W
 LIBCONFIG_INCLUDES  = $(shell pkg-config --cflags libconfig)
 LIBCONFIG_LINK      = $(shell pkg-config --libs libconfig)
 
-# all: logger.o config.o utils.o platform_utils.o
-# 	$(CC) $(CFLAGS) logger.o config.o utils.o platform_utils.o $(PRODUCER).c -o $(PRODUCER) -lrabbitmq
-# 	$(CC) $(CFLAGS) logger.o config.o utils.o platform_utils.o $(CONSUMER).c -o $(CONSUMER) -lrabbitmq
+all: $(TARGET)
 
 $(PRODUCER): logger.o cfg.o utils.o platform_utils.o
 	$(CC) $(CFLAGS) logger.o cfg.o utils.o platform_utils.o $(PRODUCER).c -o $(PRODUCER) -lrabbitmq $(LIBCONFIG_LINK)
