@@ -13,6 +13,8 @@ set(SOURCE_FILES
         producer.c
         utils.c
         logger.c
-        cfg.c)
+        cfg.c
+        rabbit_connection.c
+)
 
 add_executable(rabbitmq_benchmark ${SOURCE_FILES})
