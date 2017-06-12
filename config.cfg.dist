@@ -4,6 +4,6 @@ RABBITMQ:
 	port     = 5672;
 	vhost    = "/";
 	username = "guest";
-	username = "guest";
+	password = "guest";
 	queue    = "benchmark_queue";
 }
