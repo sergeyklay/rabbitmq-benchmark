@@ -18,7 +18,19 @@ Inspiration and code from:
 **Ubuntu**
 
 ```bash
-apt-get install libconfig++9
+apt-get install libconfig++9 libconfig++-dev
+```
+
+**CentOS**, **RHEL**, **Amazon Linux**
+
+```bash
+yum install -y libconfig libconfig-devel
+```
+
+**Arch Linux**
+
+```bash
+pacman -S libconfig
 ```
 
 **macOS**
