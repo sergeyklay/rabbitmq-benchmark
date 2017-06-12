@@ -12,7 +12,7 @@ void rabbit_init_conn(amqp_connection_state_t *conn, amqp_socket_t **socket, int
 		die("creating TCP socket");
 	}
 
-	*status = amqp_socket_open(*socket, rmq->hostname, rmq->port);
+	*status = amqp_socket_open(*socket, rmq->address, rmq->port);
 	if (*status) {
 		logger_vprint(LOG_LEVEL_ERROR, "Unable to open connection to RabbitMQ server");
 		die("opening TCP socket");

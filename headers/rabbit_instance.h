@@ -4,7 +4,7 @@
 typedef struct rabbit_instance rabbit_instance;
 
 struct rabbit_instance {
-  char *hostname;
+  char *address;
   int port;
   char *vhost;
   char *username;

@@ -8,7 +8,7 @@
 void rmq_init(rabbit_instance **rmq) {
 	*rmq = calloc(1, sizeof(rabbit_instance));
 
-	(*rmq)->hostname = NULL;
+	(*rmq)->address = NULL;
 	(*rmq)->port = 5672;
 	(*rmq)->vhost = NULL;
 	(*rmq)->username = NULL;
@@ -18,7 +18,7 @@ void rmq_init(rabbit_instance **rmq) {
 
 int rmq_prepare(rabbit_instance **rmq, const char *config_filename, char *partname) {
 	config_t config;
-	logger_vprint(LOG_LEVEL_ERROR, "Initialization of RabbitMQ instance for %s", partname);
+	logger_vprint(LOG_LEVEL_INFO, "Initialization of RabbitMQ instance for %s", partname);
 
 	if (cfg_init(&config, config_filename) == -1) {
 		goto error;
