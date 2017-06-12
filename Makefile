@@ -2,7 +2,7 @@ PRODUCER           = producer
 CONSUMER           = consumer
 TARGET             = $(PRODUCER) $(CONSUMER)
 CC                 = gcc
-DEPS               = logger.o cfg.o utils.o platform_utils.o rabbit_instance.o rabbit_connection.o
+DEPS               = logger.o cfg.o utils.o platform_utils.o rabbit_instance.o rabbit_configure.o rabbit_connection.o
 
 LIBCONFIG_INCLUDES = $(shell pkg-config --cflags libconfig)
 LINKEND_LIBS       = -lrabbitmq $(shell pkg-config --libs libconfig)
