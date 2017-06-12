@@ -8,13 +8,14 @@ include_directories(/usr/local/include)
 include_directories(./headers)
 
 set(SOURCE_FILES
-        consumer.c
-        platform_utils.c
-        producer.c
-        utils.c
-        logger.c
-        cfg.c
-        rabbit_connection.c
+	consumer.c
+	platform_utils.c
+	producer.c
+	utils.c
+	logger.c
+	cfg.c
+	rabbit_instance.c
+	rabbit_connection.c
 )
 
 add_executable(rabbitmq_benchmark ${SOURCE_FILES})
