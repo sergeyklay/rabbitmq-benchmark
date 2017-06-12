@@ -8,4 +8,4 @@ extern void die_on_amqp_error(amqp_rpc_reply_t x, char const *context);
 
 extern long long timeInMilliseconds(void);
 
-#endif //RABBITMQ_BENCHMARK_UTILS_H
+#endif // RABBITMQ_BENCHMARK_UTILS_H

@@ -7,8 +7,7 @@
 #include "cfg.h"
 #include "rabbit_connection.h"
 
-void rabbit_init_conn(amqp_connection_state_t *conn, amqp_socket_t **socket, int *status, rabbit_instance *rmq)
-{
+void rabbit_init_conn(amqp_connection_state_t *conn, amqp_socket_t **socket, int *status, rabbit_instance *rmq) {
 	*conn = amqp_new_connection();
 	*socket = amqp_tcp_socket_new(*conn);
 
@@ -23,8 +22,7 @@ void rabbit_init_conn(amqp_connection_state_t *conn, amqp_socket_t **socket, int
 	}
 }
 
-void rabbit_init_instance(rabbit_instance **rmq)
-{
+void rabbit_init_instance(rabbit_instance **rmq) {
 	*rmq = calloc(1, sizeof(rabbit_instance));
 
 	(*rmq)->hostname = NULL;
@@ -35,8 +33,7 @@ void rabbit_init_instance(rabbit_instance **rmq)
 	(*rmq)->queue = NULL;
 }
 
-int rabbit_prepare_instance(rabbit_instance **rmq, const char *config_filename, char *partname)
-{
+int rabbit_prepare_instance(rabbit_instance **rmq, const char *config_filename, char *partname) {
 	config_t config;
 	logger_vprint(LOG_LEVEL_ERROR, "Initialization of RabbitMQ instance for %s", partname);
 
@@ -53,9 +50,9 @@ int rabbit_prepare_instance(rabbit_instance **rmq, const char *config_filename, 
 	config_destroy(&config);
 	return 0;
 
-	destroy:
-		config_destroy(&config);
-		goto error;
-  	error:
-		return -1;
+  destroy:
+	config_destroy(&config);
+	goto error;
+  error:
+	return -1;
 }

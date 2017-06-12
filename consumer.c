@@ -7,8 +7,7 @@
 
 #include "utils.h"
 
-int main(int argc,const char *argv[])
-{
+int main(int argc, const char *argv[]) {
 	const char *host_name, *vhost, *queue_name, *user, *password;
 	int port, result, no_ack = 1, count = 0;
 	uint16_t prefetch_count;
@@ -30,29 +29,37 @@ int main(int argc,const char *argv[])
 	user = argv[4];
 	password = argv[5];
 	queue_name = argv[6];
-	prefetch_count = (uint16_t)atoi(argv[7]);
+	prefetch_count = (uint16_t) atoi(argv[7]);
 
 	if (strcmp(argv[8], "false") == 0) {
 		no_ack = 0;
 	}
 
-	conn_state  = amqp_new_connection();
+	conn_state = amqp_new_connection();
 	conn_socket = amqp_tcp_socket_new(conn_state);
 
 	if (amqp_socket_open(conn_socket, host_name, port)) {
 		die("Unable to open connection to RabbitMQ server");
 	}
 
-	die_on_amqp_error(amqp_login(conn_state, vhost, 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, user, password), "Logging in");
+	die_on_amqp_error(amqp_login(conn_state, vhost, 0, 131072, 0, AMQP_SASL_METHOD_PLAIN, user, password),
+					  "Logging in");
 	amqp_channel_open(conn_state, channel_id);
 	die_on_amqp_error(amqp_get_rpc_reply(conn_state), "Opening channel");
 
 	amqp_basic_qos(conn_state, channel_id, 0, prefetch_count, 0);
-	amqp_basic_consume(conn_state, channel_id, amqp_cstring_bytes(queue_name), amqp_empty_bytes, 0, no_ack, 0, amqp_empty_table);
+	amqp_basic_consume(conn_state,
+					   channel_id,
+					   amqp_cstring_bytes(queue_name),
+					   amqp_empty_bytes,
+					   0,
+					   no_ack,
+					   0,
+					   amqp_empty_table);
 	die_on_amqp_error(amqp_get_rpc_reply(conn_state), "Consuming");
 
 	long long start = timeInMilliseconds();
-	while(1) {
+	while (1) {
 		{
 			amqp_maybe_release_buffers(conn_state);
 			result = amqp_simple_wait_frame(conn_state, &frame);
@@ -93,7 +100,7 @@ int main(int argc,const char *argv[])
 		}
 
 		count++;
-		if(count % 10000 == 0) {
+		if (count % 10000 == 0) {
 			long long end = timeInMilliseconds();
 			fprintf(
 				stderr,

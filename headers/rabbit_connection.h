@@ -19,4 +19,4 @@ void rabbit_init_conn(amqp_connection_state_t *conn, amqp_socket_t **socket, int
 void rabbit_init_instance(rabbit_instance **rmq);
 int rabbit_prepare_instance(rabbit_instance **rmq, const char *config_filename, char *partname);
 
-#endif //RABBITMQ_BENCHMARK_RABBIT_CONNECTION_C_H
+#endif // RABBITMQ_BENCHMARK_RABBIT_CONNECTION_C_H

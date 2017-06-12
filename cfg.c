@@ -4,8 +4,7 @@
 #include "logger.h"
 #include "cfg.h"
 
-int cfg_init(config_t *cfg, const char *filename)
-{
+int cfg_init(config_t *cfg, const char *filename) {
 	if (access(filename, F_OK) == -1) {
 		logger_vprint(
 			LOG_LEVEL_ERROR,
@@ -31,8 +30,7 @@ int cfg_init(config_t *cfg, const char *filename)
 	return 0;
 }
 
-int cfg_read(config_t *cfg, const char *filename)
-{
+int cfg_read(config_t *cfg, const char *filename) {
 	if (!config_read_file(cfg, filename)) {
 		logger_vprint(
 			LOG_LEVEL_ERROR,

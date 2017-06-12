@@ -47,18 +47,16 @@
 long long timeInMilliseconds(void) {
 	struct timeval tv;
 
-	gettimeofday(&tv,NULL);
-	return (((long long)tv.tv_sec)*1000+(tv.tv_usec)/1000);
+	gettimeofday(&tv, NULL);
+	return (((long long) tv.tv_sec) * 1000 + (tv.tv_usec) / 1000);
 }
 
-uint64_t now_microseconds(void)
-{
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  return (uint64_t) tv.tv_sec * 1000000 + (uint64_t) tv.tv_usec;
+uint64_t now_microseconds(void) {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return (uint64_t) tv.tv_sec * 1000000 + (uint64_t) tv.tv_usec;
 }
 
-void microsleep(int usec)
-{
-  usleep(usec);
+void microsleep(int usec) {
+	usleep(usec);
 }
