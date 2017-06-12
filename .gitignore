@@ -3,3 +3,6 @@
 /cmake-build-debug
 /*.dSYM
 config.cfg
+
+*.o
+*.a
