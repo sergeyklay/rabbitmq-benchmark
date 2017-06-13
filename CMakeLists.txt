@@ -16,6 +16,7 @@ set(SOURCE_FILES
 	rabbit_instance.c
 	rabbit_connection.c
 	rb.c
+	rabbit_auth.c
 )
 
 add_executable(rabbitmq_benchmark ${SOURCE_FILES})
