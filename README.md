@@ -2,8 +2,6 @@
 
 Inspiration and code from:
 
-* https://github.com/jeffkit/rabbitmq-benchmark (Java)
-* https://github.com/liuhaobupt/rabbitmq-benchmark (C)
 * https://github.com/LeGaulois/openstack-zabbix-module (C)
 
 ## Get Started
