@@ -33,7 +33,7 @@ int cfg_read(config_t *cfg, const char *filename) {
 		return EXIT_FAILURE;
 	}
 
-	OUT_ERROR("Using the %s configuration file", filename);
+	OUT_INFO("Using the %s configuration file", filename);
 
 	return EXIT_SUCCESS;
 }

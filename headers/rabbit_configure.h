@@ -23,4 +23,4 @@ void rcfg_get_username(config_t *cfg, char *partname, rabbit_instance *rmq);
 void rcfg_get_password(config_t *cfg, char *partname, rabbit_instance *rmq);
 void rcfg_get_queue(config_t *cfg, char *partname, rabbit_instance *rmq);
 
-#endif //RABBITMQ_BENCHMARK_RABBIT_CONFIGURE_H
+#endif // RABBITMQ_BENCHMARK_RABBIT_CONFIGURE_H

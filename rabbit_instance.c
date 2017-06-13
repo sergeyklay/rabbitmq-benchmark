@@ -34,7 +34,8 @@ void rmq_destroy(rabbit_instance **rmq) {
 
 int rmq_prepare(rabbit_instance **rmq, const char *config_filename, char *partname) {
 	config_t config;
-	OUT_ERROR("Initialization of RabbitMQ instance for %s", partname);
+
+	OUT_INFO("Initialization the RabbitMQ instance. Using %s config section", partname);
 
 	if (cfg_init(&config, config_filename) == EXIT_FAILURE) {
 		goto error;
