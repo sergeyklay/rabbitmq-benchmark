@@ -1,8 +1,9 @@
 PRODUCER           = producer
 CONSUMER           = consumer
-TARGET             = $(PRODUCER) $(CONSUMER)
+CONSUMER           = rb
+TARGET             = $(PRODUCER) $(CONSUMER) $(RB)
 CC                 = gcc
-DEPS               = logger.o cfg.o utils.o platform_utils.o rabbit_instance.o rabbit_configure.o rabbit_connection.o
+DEPS               = cfg.o utils.o platform_utils.o rabbit_instance.o rabbit_configure.o rabbit_connection.o
 
 LIBCONFIG_INCLUDES = $(shell pkg-config --cflags libconfig)
 LINKEND_LIBS       = -lrabbitmq $(shell pkg-config --libs libconfig)
@@ -10,6 +11,9 @@ LINKEND_LIBS       = -lrabbitmq $(shell pkg-config --libs libconfig)
 CFLAGS             += -march=native -mtune=native -Wall -fstack-protector-all -Wstack-protector -g -O2 -I. -I./headers $(LIBCONFIG_INCLUDES)
 
 all: $(TARGET)
+
+$(RB): $(DEPS)
+	$(CC) $(CFLAGS) $(DEPS) $(RB).c -o $(RB) $(LINKEND_LIBS)
 
 $(PRODUCER): $(DEPS)
 	$(CC) $(CFLAGS) $(DEPS) $(PRODUCER).c -o $(PRODUCER) $(LINKEND_LIBS)
@@ -21,6 +25,6 @@ $(CONSUMER): $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 clean:
-	-rm -rf $(PRODUCER) $(CONSUMER) *.o *.dSYM
+	-rm -rf $(PRODUCER) $(CONSUMER) $(RB) *.o *.dSYM
 
 .PHONY: clean

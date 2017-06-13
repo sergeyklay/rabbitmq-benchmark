@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <libconfig.h>
 
-#include "logger.h"
+#include "common.h"
 #include "rabbit_configure.h"
 #include "rabbit_instance.h"
 
@@ -19,9 +19,7 @@ void rcfg_get_address(config_t *cfg, char *partname, rabbit_instance *rmq) {
 		strncpy(rmq->address, str_tmp, len_str - 1);
 	} else {
 		rmq->address = strndup("127.0.0.1", 9);
-		logger_vprint(LOG_LEVEL_INFO,
-					  "%s: Unable to get the RabbitMQ address, used default '127.0.0.1'",
-					  config_error_file(cfg));
+		OUT_INFO("%s: Unable to get the RabbitMQ address, used default '127.0.0.1'", config_error_file(cfg));
 	}
 
 	free(item);
@@ -36,9 +34,7 @@ void rcfg_get_port(config_t *cfg, char *partname, rabbit_instance *rmq) {
 	if (config_lookup_int(cfg, item, &port)) {
 		rmq->port = (short unsigned int) (port);
 	} else {
-		logger_vprint(LOG_LEVEL_INFO,
-					  "%s: Unable to get the RabbitMQ port, used default '5672'",
-					  config_error_file(cfg));
+		OUT_INFO("%s: Unable to get the RabbitMQ port, used default '5672'", config_error_file(cfg));
 	}
 
 	free(item);
@@ -57,9 +53,7 @@ void rcfg_get_vhost(config_t *cfg, char *partname, rabbit_instance *rmq) {
 		strncpy(rmq->vhost, str_tmp, len_str - 1);
 	} else {
 		rmq->vhost = strndup("/", 1);
-		logger_vprint(LOG_LEVEL_INFO,
-					  "%s: Unable to get the RabbitMQ vhost, used default '/'",
-					  config_error_file(cfg));
+		OUT_INFO("%s: Unable to get the RabbitMQ vhost, used default '/'", config_error_file(cfg));
 	}
 
 	free(item);
@@ -78,9 +72,7 @@ void rcfg_get_username(config_t *cfg, char *partname, rabbit_instance *rmq) {
 		strncpy(rmq->username, str_tmp, len_str - 1);
 	} else {
 		rmq->username = strndup("guest", 5);
-		logger_vprint(LOG_LEVEL_INFO,
-					  "%s: Unable to get the RabbitMQ username, used default 'guest'",
-					  config_error_file(cfg));
+		OUT_INFO("%s: Unable to get the RabbitMQ username, used default 'guest'", config_error_file(cfg));
 	}
 
 	free(item);
@@ -99,9 +91,7 @@ void rcfg_get_password(config_t *cfg, char *partname, rabbit_instance *rmq) {
 		strncpy(rmq->password, str_tmp, len_str - 1);
 	} else {
 		rmq->password = strndup("guest", 5);
-		logger_vprint(LOG_LEVEL_INFO,
-					  "%s: Unable to get the RabbitMQ password, used default 'guest'",
-					  config_error_file(cfg));
+		OUT_INFO("%s: Unable to get the RabbitMQ password, used default 'guest'", config_error_file(cfg));
 	}
 
 	free(item);
@@ -120,9 +110,7 @@ void rcfg_get_queue(config_t *cfg, char *partname, rabbit_instance *rmq) {
 		strncpy(rmq->queue, str_tmp, len_str - 1);
 	} else {
 		rmq->queue = strndup("benchmark_queue", 15);
-		logger_vprint(LOG_LEVEL_INFO,
-					  "%s: Unable to get the RabbitMQ queue, used default 'benchmark_queue'",
-					  config_error_file(cfg));
+		OUT_INFO( "%s: Unable to get the RabbitMQ queue, used default 'benchmark_queue'", config_error_file(cfg));
 	}
 
 	free(item);

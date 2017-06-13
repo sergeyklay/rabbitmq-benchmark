@@ -2,7 +2,7 @@
 #include <libconfig.h>
 
 #include "cfg.h"
-#include "logger.h"
+#include "common.h"
 #include "rabbit_instance.h"
 
 void rmq_init(rabbit_instance **rmq) {
@@ -18,24 +18,24 @@ void rmq_init(rabbit_instance **rmq) {
 
 int rmq_prepare(rabbit_instance **rmq, const char *config_filename, char *partname) {
 	config_t config;
-	logger_vprint(LOG_LEVEL_INFO, "Initialization of RabbitMQ instance for %s", partname);
+	OUT_ERROR("Initialization of RabbitMQ instance for %s", partname);
 
-	if (cfg_init(&config, config_filename) == -1) {
+	if (cfg_init(&config, config_filename) == EXIT_FAILURE) {
 		goto error;
 	}
 
-	if (cfg_read(&config, config_filename) == -1) {
+	if (cfg_read(&config, config_filename) == EXIT_FAILURE) {
 		goto destroy;
 	}
 
 	rmq_init(rmq);
 
 	config_destroy(&config);
-	return 0;
+	return EXIT_SUCCESS;
 
   destroy:
 	config_destroy(&config);
 	goto error;
   error:
-	return -1;
+	return EXIT_FAILURE;
 }
