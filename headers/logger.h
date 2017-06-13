@@ -14,8 +14,8 @@ typedef enum {
   LOG_LEVEL_FATAL
 } log_level_t;
 
-int logger_quit(void);
 int logger_init(const char *filename);
+int logger_flush(void);
 void logger_vprint(log_level_t level, const char *msg, ...);
 
 #endif // RABBITMQ_BENCHMARK_LOGGER_H

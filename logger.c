@@ -37,7 +37,7 @@ static void logger_print_header(log_level_t level) {
 	logger_print_date();
 }
 
-int logger_quit(void) {
+int logger_flush(void) {
 	return log_file && fclose(log_file) != EOF;
 }
 
