@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <libconfig.h>
+#include <rabbit_configure.h>
 
 #include "cfg.h"
 #include "common.h"
@@ -16,6 +17,21 @@ void rmq_init(rabbit_instance **rmq) {
 	(*rmq)->queue = NULL;
 }
 
+void rmq_destroy(rabbit_instance **rmq) {
+	if ((*rmq)->address)
+		free((*rmq)->address);
+	if ((*rmq)->vhost)
+		free((*rmq)->vhost);
+	if ((*rmq)->username)
+		free((*rmq)->username);
+	if ((*rmq)->password)
+		free((*rmq)->password);
+	if ((*rmq)->queue)
+		free((*rmq)->queue);
+
+	free(*rmq);
+}
+
 int rmq_prepare(rabbit_instance **rmq, const char *config_filename, char *partname) {
 	config_t config;
 	OUT_ERROR("Initialization of RabbitMQ instance for %s", partname);
@@ -29,6 +45,13 @@ int rmq_prepare(rabbit_instance **rmq, const char *config_filename, char *partna
 	}
 
 	rmq_init(rmq);
+
+	rcfg_get_address(&config, partname, *rmq);
+	rcfg_get_port(&config, partname, *rmq);
+	rcfg_get_vhost(&config, partname, *rmq);
+	rcfg_get_username(&config, partname, *rmq);
+	rcfg_get_password(&config, partname, *rmq);
+	rcfg_get_queue(&config, partname, *rmq);
 
 	config_destroy(&config);
 	return EXIT_SUCCESS;
