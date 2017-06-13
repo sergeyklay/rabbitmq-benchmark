@@ -1,5 +1,6 @@
 /consumer
 /producer
+/rb
 /cmake-build-debug
 /*.dSYM
 /config.cfg
